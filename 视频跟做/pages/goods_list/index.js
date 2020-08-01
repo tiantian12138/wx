@@ -19,7 +19,7 @@ Page({
         isActive: false
       }
     ],
-    goodsList:[]
+    goodsList: []
   },
   QueryParams: {
     query: "",
@@ -27,15 +27,19 @@ Page({
     pagenum: 1,
     pagesize: 10
   },
+  totalPages: 1,
   onLoad: function (options) {
     this.QueryParams.cid = options.cid
     this.getGoodsList()
   },
-  async getGoodsList(){
-    const res=await request({url:"/goods/search",data:this.QueryParams})
+  async getGoodsList() {
+    const res = await request({ url: "/goods/search", data: this.QueryParams })
+    const total = res.total;
+    this.totalPages = Math.ceil(total / this.QueryParams.pagesize)
     this.setData({
-      goodsList:res.goods
+      goodsList: [...this.data.goodsList, ...res.goods]
     })
+    wx.stopPullDownRefresh()
   },
   handleTabsItemChange(e) {
     const { index } = e.detail;
@@ -44,5 +48,20 @@ Page({
     this.setData({
       tabs
     })
+  },
+  onReachBottom() {
+    if (this.QueryParams.pagenum >= this.totalPages) {
+      wx.showToast({ title: '没有下一页数据了' })
+    } else {
+      this.QueryParams.pagenum++
+      this.getGoodsList()
+    }
+  },
+  onPullDownRefresh() {
+    this.setData({
+      goodsList:[]
+    })
+    this.QueryParams.pagenum=1
+    this.getGoodsList()
   }
 })

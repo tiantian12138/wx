@@ -1,0 +1,21 @@
+文件夹          作用
+styles          存放公共样式
+components      存放组件
+lib             存放第三方库
+utils           自己的帮助库
+request         自己的接口帮助库
+
+
+页面            名称
+首页            index
+分类页面        category
+商品列表        goods_list
+商品详情        goos_detail
+购物车          cart 
+收藏            collect
+订单            order
+搜索            search
+个人中心        user
+意见反馈        feedback
+授权            auth
+结算            pay
